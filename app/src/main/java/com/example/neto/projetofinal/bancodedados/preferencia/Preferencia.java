@@ -1,4 +1,4 @@
-package com.example.neto.projetofinal.bancodedados.Preferencia;
+package com.example.neto.projetofinal.bancodedados.preferencia;
 
 import java.io.Serializable;
 

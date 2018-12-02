@@ -1,4 +1,4 @@
-package com.example.neto.projetofinal.login;
+package com.example.neto.projetofinal.activitys.login;
 
 import android.app.Activity;
 import android.content.Intent;

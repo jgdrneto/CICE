@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.neto.activitys">
 
-    <!-- To auto-complete the email text field in the com.example.neto.projetofinal.login form with the user's emails -->
+    <!-- To auto-complete the email text field in the com.example.neto.projetofinal.activitys.login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -15,8 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.example.neto.projetofinal.login.LoginActivity" />
-        <activity android:name="com.example.neto.projetofinal.login.SplashActivity">
+        <activity android:name="com.example.neto.projetofinal.activitys.login.LoginActivity" />
+        <activity android:name="com.example.neto.projetofinal.activitys.login.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,15 +24,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.neto.projetofinal.MainActivity"
+            android:name="com.example.neto.projetofinal.activitys.MainActivity"
             android:label="@string/title_activity_main"
-            android:parentActivityName="com.example.neto.projetofinal.login.LoginActivity"
+            android:parentActivityName="com.example.neto.projetofinal.activitys.login.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.neto.projetofinal.login.LoginActivity" />
+                android:value="com.example.neto.projetofinal.activitys.login.LoginActivity" />
         </activity>
 
+        <service
+            android:name="com.example.neto.projetofinal.services.AtualizarEventosService"
+            android:exported="false"></service>
     </application>
 
 </manifest>

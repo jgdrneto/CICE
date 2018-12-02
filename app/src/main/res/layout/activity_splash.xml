@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    tools:context="com.example.neto.projetofinal.login.SplashActivity">
+    tools:context="com.example.neto.projetofinal.activitys.login.SplashActivity">
 
     <ImageView
         android:layout_width="match_parent"

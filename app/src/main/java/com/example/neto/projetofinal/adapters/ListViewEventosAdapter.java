@@ -3,29 +3,35 @@ package com.example.neto.projetofinal.adapters;
 import android.content.Context;
 import android.widget.ArrayAdapter;
 
+import com.example.neto.projetofinal.bancodedados.evento.Evento;
+
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-public class ListViewEventosAdapter extends ArrayAdapter<String>{
+public class ListViewEventosAdapter extends ArrayAdapter<Evento>{
 
-    HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
+    List<Evento> eventos;
 
-    public ListViewEventosAdapter(Context context, int textViewResourceId, List<String> objects) {
+    public ListViewEventosAdapter(Context context, int textViewResourceId, List<Evento> objects) {
         super(context, textViewResourceId, objects);
-        for (int i = 0; i < objects.size(); ++i) {
-            mIdMap.put(objects.get(i), i);
-        }
+        eventos = objects;
+    }
+
+    public void updateAll(Collection<? extends  Evento> newEventos){
+        eventos.clear();
+        eventos.addAll(newEventos);
+        this.notifyDataSetChanged();
     }
 
     @Override
     public long getItemId(int position) {
-        String item = getItem(position);
-        return mIdMap.get(item);
+        return eventos.indexOf(eventos.get(position));
     }
 
     @Override
     public boolean hasStableIds() {
         return true;
     }
-
+    
 }

@@ -1,4 +1,4 @@
-package com.example.neto.projetofinal.login;
+package com.example.neto.projetofinal.activitys.login;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.neto.projetofinal.MainActivity;
+import com.example.neto.projetofinal.activitys.MainActivity;
 import com.example.neto.activitys.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

@@ -1,6 +1,7 @@
-package com.example.neto.projetofinal;
+package com.example.neto.projetofinal.activitys;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -20,16 +21,27 @@ import android.widget.Toast;
 
 import com.example.neto.activitys.R;
 import com.example.neto.projetofinal.adapters.ListViewEventosAdapter;
+import com.example.neto.projetofinal.bancodedados.evento.Evento;
+import com.example.neto.projetofinal.broadcasts.EventosReceiver;
+import com.example.neto.projetofinal.services.AtualizarEventosService;
 import com.google.firebase.auth.FirebaseAuth;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener{
 
+    ArrayList<Evento> list;
+    ListViewEventosAdapter adapter;
     ListView listView;
     String email;
     private FirebaseAuth auth;
+    EventosReceiver eventosReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,55 +80,74 @@ public class MainActivity extends AppCompatActivity
 
         this.auth = FirebaseAuth.getInstance();
 
+        initServices();
+
+        initReceives();
+
         this.listView = findViewById(R.id.listaEventos);
 
-        String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
-                "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-                "Linux", "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux",
-                "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux", "OS/2",
-                "Android", "iPhone", "WindowsMobile" };
+        this.list = new ArrayList<Evento>();
 
-        final ArrayList<String> list = new ArrayList<String>();
-        for (int i = 0; i < values.length; ++i) {
-            list.add(values[i]);
-        }
-        final ListViewEventosAdapter adapter = new ListViewEventosAdapter(this,
+        this.adapter = new ListViewEventosAdapter(this,
                 android.R.layout.simple_list_item_1, list);
+
         this.listView.setAdapter(adapter);
+        this.listView.setOnItemClickListener(this);
 
-        this.listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+    }
 
-            @Override
-            public void onItemClick(AdapterView<?> parent, final View view,
-                                    int position, long id) {
-                final String item = (String) parent.getItemAtPosition(position);
-                view.animate().setDuration(500).alpha(0)
-                        .withEndAction(new Runnable() {
-                            @Override
-                            public void run() {
-                                list.remove(item);
-                                adapter.notifyDataSetChanged();
-                                view.setAlpha(1);
-                            }
-                        });
-            }
+    private void initReceives() {
 
-        });
+        this.eventosReceiver =  new EventosReceiver();
+        IntentFilter intentFilter =  new IntentFilter();
+        intentFilter.addAction("cice.android.broadcast.MUDAR_EVENTOS");
+        registerReceiver(eventosReceiver,intentFilter);
+
+    }
+
+    private void initServices() {
+
+        AtualizarEventosService.continuar = true;
+
+        Intent atueveservice = new Intent(getApplicationContext(),AtualizarEventosService.class);
+
+        startService(atueveservice);
+
+    }
+
+    private  void stopReceivers(){
+        if(this.eventosReceiver!=null){
+            unregisterReceiver(eventosReceiver);
+        }
+    }
+
+    private void stopServices(){
+        AtualizarEventosService.continuar = false;
     }
 
     private void logoff(){
+
+        stopReceivers();
+        stopServices();
+
         auth.signOut();
+
         finish();
     }
 
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
+
+        stopReceivers();
+        stopServices();
+
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
+
     }
 
     @Override
@@ -166,5 +197,25 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void atualizarLista(List<Evento> listaEventos) {
+        adapter.updateAll(listaEventos);
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        stopReceivers();
+        stopServices();
+
+        super.onDestroy();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        Evento item = (Evento) parent.getItemAtPosition(position);
+
     }
 }
