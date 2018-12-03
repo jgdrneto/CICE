@@ -1,5 +1,6 @@
 package com.example.neto.projetofinal.activitys;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -23,20 +24,24 @@ import com.example.neto.activitys.R;
 import com.example.neto.projetofinal.adapters.ListViewEventosAdapter;
 import com.example.neto.projetofinal.bancodedados.evento.Evento;
 import com.example.neto.projetofinal.broadcasts.EventosReceiver;
+import com.example.neto.projetofinal.dialogs.ExcluirEventoDialogFragment;
 import com.example.neto.projetofinal.services.AtualizarEventosService;
+import com.example.neto.projetofinal.services.NotificacaoService;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener{
+        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener,ExcluirEventoDialogFragment.OnOptionSelectedListener{
 
-    ArrayList<Evento> list;
+    public static volatile List<Evento> list = Collections.synchronizedList(new ArrayList<Evento>());
     ListViewEventosAdapter adapter;
     ListView listView;
     String email;
@@ -86,13 +91,12 @@ public class MainActivity extends AppCompatActivity
 
         this.listView = findViewById(R.id.listaEventos);
 
-        this.list = new ArrayList<Evento>();
-
         this.adapter = new ListViewEventosAdapter(this,
                 android.R.layout.simple_list_item_1, list);
 
         this.listView.setAdapter(adapter);
         this.listView.setOnItemClickListener(this);
+        this.listView.setOnItemLongClickListener(this);
 
     }
 
@@ -110,9 +114,11 @@ public class MainActivity extends AppCompatActivity
         AtualizarEventosService.continuar = true;
 
         Intent atueveservice = new Intent(getApplicationContext(),AtualizarEventosService.class);
-
         startService(atueveservice);
 
+        NotificacaoService.continuar = true;
+        Intent notservice = new Intent(getApplicationContext(),NotificacaoService.class);
+        startService(notservice);
     }
 
     private  void stopReceivers(){
@@ -123,24 +129,20 @@ public class MainActivity extends AppCompatActivity
 
     private void stopServices(){
         AtualizarEventosService.continuar = false;
+        NotificacaoService.continuar = false;
     }
 
     private void logoff(){
 
-        stopReceivers();
-        stopServices();
+        finish();
 
         auth.signOut();
 
-        finish();
     }
 
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-
-        stopReceivers();
-        stopServices();
 
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -217,5 +219,24 @@ public class MainActivity extends AppCompatActivity
 
         Evento item = (Evento) parent.getItemAtPosition(position);
 
+        Toast.makeText(this,item.getNome(),Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+        Evento item = (Evento) parent.getItemAtPosition(position);
+
+        ExcluirEventoDialogFragment.show(getSupportFragmentManager(),item,this);
+
+        return false;
+    }
+
+    @Override
+    public void onOptionSelected(boolean opcao,Evento e, Context c) {
+        if(opcao){
+            this.adapter.remove(e);
+        }
     }
 }

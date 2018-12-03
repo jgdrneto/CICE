@@ -3,11 +3,12 @@ package com.example.neto.projetofinal.bancodedados.evento;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Evento {
+public class Evento implements Serializable {
 
     String nome;
     String tipo;
@@ -42,6 +43,18 @@ public class Evento {
 
         return  "\n" + this.nome + " - " + this.tipo + "\n\n" +
                 "Inicio: " + hour.format(this.dataInicio) + "\n" +
-                "Fim: " + hour.format(this.dataFinal)+ "\n" ;
+                "Fim:    " + hour.format(this.dataFinal)+ "\n" ;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public Date getDataInicio() {
+        return dataInicio;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 }

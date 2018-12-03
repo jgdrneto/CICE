@@ -1,14 +1,23 @@
 package com.example.neto.projetofinal.services;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StreamDownloadTask;
 
@@ -71,35 +80,38 @@ public class AtualizarEventosService extends IntentService {
 
                 Date dateAtual = formatador.parse(json.getString("ultimaatualizacao"));
 
-                if(ultimaAtualizacao==null || !ultimaAtualizacao.equals(dateAtual)){
+                if (ultimaAtualizacao == null || !ultimaAtualizacao.equals(dateAtual)) {
 
                     ultimaAtualizacao = dateAtual;
 
-                    Log.i("MYAPP","Enviando broadcast de mudança");
+                    Log.i("MYAPP", "Enviando broadcast de mudança");
 
                     Intent nIntent = new Intent("cice.android.broadcast.MUDAR_EVENTOS");
-                    nIntent.putExtra("JSON",json.toString());
+                    nIntent.putExtra("JSON", json.toString());
                     sendBroadcast(nIntent);
                 }
 
             } catch (ExecutionException e) {
-                e.printStackTrace();
+                Log.e("MYAPP","Erro na obtenção do arquivo no firebase",e);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Log.e("MYAPP","Erro na interrupção da tarefa de leitura do arquivo",e);
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e("MYAPP","Erro de abertura do arquivo",e);
             } catch (JSONException e) {
-                e.printStackTrace();
+                Log.e("MYAPP","Erro na obtenção de valores do JSON",e);
             } catch (ParseException e) {
-                e.printStackTrace();
+                Log.e("MYAPP","Erro no conversor para arquivo JSON",e);
+            }catch (Exception e ){
+                Log.e("MYAPP","Erro desconhecido",e);
             }
 
-            Log.i("MYAPP",this.eventos.getName());
 
-            SystemClock.sleep(10000);
+
+            SystemClock.sleep(1000);
         }
 
         stopSelf();
 
     }
+
 }
