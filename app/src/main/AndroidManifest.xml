@@ -38,7 +38,10 @@
             android:exported="false" />
         <service
             android:name="com.example.neto.projetofinal.services.NotificacaoService"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <activity android:name="com.example.neto.projetofinal.activitys.EventoActivity" />
+        <activity android:name="com.example.neto.projetofinal.activitys.SobreActivity"></activity>
     </application>
 
 </manifest>

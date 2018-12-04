@@ -6,5 +6,5 @@
     <string name="nav_header_title">CICE Versão 0.1Alpha</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_sobre">Sobre</string>
 </resources>

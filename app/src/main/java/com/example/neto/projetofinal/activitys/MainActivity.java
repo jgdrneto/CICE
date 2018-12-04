@@ -1,5 +1,6 @@
 package com.example.neto.projetofinal.activitys;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -29,14 +30,9 @@ import com.example.neto.projetofinal.services.AtualizarEventosService;
 import com.example.neto.projetofinal.services.NotificacaoService;
 import com.google.firebase.auth.FirebaseAuth;
 
-import org.json.JSONObject;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener,ExcluirEventoDialogFragment.OnOptionSelectedListener{
@@ -132,14 +128,6 @@ public class MainActivity extends AppCompatActivity
         NotificacaoService.continuar = false;
     }
 
-    private void logoff(){
-
-        finish();
-
-        auth.signOut();
-
-    }
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -167,8 +155,9 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Toast.makeText(this,"settings", Toast.LENGTH_LONG).show();
+        if (id == R.id.action_sobre) {
+            Intent i = new Intent(getApplicationContext(),SobreActivity.class);
+            startActivity(i);
             return true;
         }
 
@@ -182,18 +171,12 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
+        if (id == R.id.nav_preferencias) {
 
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_logout) {
-            this.logoff();
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -210,6 +193,13 @@ public class MainActivity extends AppCompatActivity
 
         stopReceivers();
         stopServices();
+
+        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        for(int i = 0; i<MainActivity.list.size();i++) {
+            notificationManager.cancel(i);
+        }
+
+        auth.signOut();
 
         super.onDestroy();
     }
