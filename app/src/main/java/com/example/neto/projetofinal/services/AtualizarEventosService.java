@@ -35,12 +35,7 @@ import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 
-/**
- * An {@link IntentService} subclass for handling asynchronous task requests in
- * a service on a separate handler thread.
- * <p>
- * TODO: Customize class - update intent actions and extra parameters.
- */
+
 public class AtualizarEventosService extends IntentService {
 
     public static volatile boolean continuar = true;
@@ -53,7 +48,7 @@ public class AtualizarEventosService extends IntentService {
         super("AtualizarEventosService");
         this.eventos = FirebaseStorage.getInstance().getReference("cice.json");
 
-        this.formatador = new SimpleDateFormat("HH:mm dd/MM/yyy");
+        this.formatador = new SimpleDateFormat("HH:mm dd/MM/yyyy");
     }
 
     @Override

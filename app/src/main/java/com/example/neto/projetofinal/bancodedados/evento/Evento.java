@@ -10,6 +10,8 @@ import java.util.Date;
 
 public class Evento implements Serializable {
 
+    private static final long serialVersionUID = 5782589762770668432L;
+
     String nome;
     String tipo;
     String complemento;
@@ -56,5 +58,57 @@ public class Evento implements Serializable {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getComplemento() {
+        return complemento;
+    }
+
+    public void setComplemento(String complemento) {
+        this.complemento = complemento;
+    }
+
+    public String getNomeLocal() {
+        return nomeLocal;
+    }
+
+    public void setNomeLocal(String nomeLocal) {
+        this.nomeLocal = nomeLocal;
+    }
+
+    public void setDataInicio(Date dataInicio) {
+        this.dataInicio = dataInicio;
+    }
+
+    public Date getDataFinal() {
+        return dataFinal;
+    }
+
+    public void setDataFinal(Date dataFinal) {
+        this.dataFinal = dataFinal;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
+
+    public String getPluscodes() {
+        return pluscodes;
+    }
+
+    public void setPluscodes(String pluscodes) {
+        this.pluscodes = pluscodes;
     }
 }

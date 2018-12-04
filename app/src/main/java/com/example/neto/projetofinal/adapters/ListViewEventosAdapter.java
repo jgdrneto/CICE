@@ -6,7 +6,6 @@ import android.widget.ArrayAdapter;
 import com.example.neto.projetofinal.bancodedados.evento.Evento;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 
 public class ListViewEventosAdapter extends ArrayAdapter<Evento>{

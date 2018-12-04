@@ -5,4 +5,6 @@
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="textView_key">0.33</dimen>
+    <dimen name="textView_value">0.67</dimen>
 </resources>
