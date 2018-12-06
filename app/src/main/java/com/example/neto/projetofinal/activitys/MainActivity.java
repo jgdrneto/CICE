@@ -258,6 +258,10 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    public ManipuladorPreferencias getManipuladorPreferencias() {
+        return manipuladorPreferencias;
+    }
+
     @Override
     public void onUpdatePreferences(String[] preferencias, boolean[] valores) {
 
@@ -277,12 +281,6 @@ public class MainActivity extends AppCompatActivity
                 }
             } catch (JSONException e1) {
                 Log.e("MYAPP","Erro na obtenção do tipo de evento " + e.getTipo(), e1);
-            } catch (NullPointerException e1) {
-                /*
-                SE ENTROU AQUI É PQ A NOTIFICAÇÃO NÃO ESTA ATIVA,
-                ENTAO NÃO FAZ NADA,INFELIZMENTE O MÉTODO PARA VER
-                AS NOTIFICAÇÕES ATIVAS SO TEM NA API 23.
-                */
             }
         }
 

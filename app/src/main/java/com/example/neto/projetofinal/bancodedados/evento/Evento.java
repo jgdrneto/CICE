@@ -41,11 +41,9 @@ public class Evento implements Serializable {
     @Override
     public String toString() {
 
-        SimpleDateFormat hour = new SimpleDateFormat("HH:mm");
-
         return  "\n" + this.nome + " - " + this.tipo + "\n\n" +
-                "Inicio: " + hour.format(this.dataInicio) + "\n" +
-                "Fim:    " + hour.format(this.dataFinal)+ "\n" ;
+                "Inicio: " + this.format.format(this.dataInicio) + "\n" +
+                "Fim:    " + this.format.format(this.dataFinal)+ "\n" ;
     }
 
     public String getNome() {
@@ -131,7 +129,7 @@ public class Evento implements Serializable {
     @Override
     public int hashCode() {
 
-        int i =Objects.hash(nome, tipo, complemento, nomeLocal, dataInicio, dataFinal, endereco, pluscodes);
+        int i = Objects.hash(nome, tipo, complemento, nomeLocal, dataInicio, dataFinal, endereco, pluscodes);
 
         if(i<0){
             return i*(-1);

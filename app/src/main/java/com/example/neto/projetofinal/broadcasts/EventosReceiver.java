@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.example.neto.projetofinal.activitys.MainActivity;
 import com.example.neto.projetofinal.bancodedados.evento.Evento;
+import com.example.neto.projetofinal.bancodedados.preferencia.ManipuladorPreferencias;
 import com.example.neto.projetofinal.dialogs.AtualizarListaDialogFragment;
 
 import org.json.JSONArray;
@@ -15,6 +16,8 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 public class EventosReceiver extends BroadcastReceiver implements AtualizarListaDialogFragment.OnOptionSelectedListener {
@@ -51,19 +54,28 @@ public class EventosReceiver extends BroadcastReceiver implements AtualizarLista
             List<Evento> listaEventos = new ArrayList<Evento>();
             List<String> preferencias = new ArrayList<String>();
 
+            ManipuladorPreferencias manipulador = m.getManipuladorPreferencias();
+            JSONObject jsonPreferencias = manipulador.gerarJSONObject();
+            Iterator<String> chaves = jsonPreferencias.keys();
+
             try {
                 JSONObject json = new JSONObject(intent.getStringExtra("JSON"));
 
                 JSONArray eventos = json.getJSONArray("dados");
 
+                Date date = new Date();
+
                 for (int i = 0; i < eventos.length(); i++) {
                     try {
                         Evento e = new Evento((JSONObject) eventos.get(i));
 
-                        listaEventos.add(e);
+                        if(date.before(e.getDataInicio())) {
+                            listaEventos.add(e);
 
-                        if(!preferencias.contains(e.getTipo())){
-                            preferencias.add(e.getTipo());
+                            if(!preferencias.contains(e.getTipo())){
+                                preferencias.add(e.getTipo());
+                            }
+
                         }
 
                     } catch (ParseException e) {
@@ -75,7 +87,10 @@ public class EventosReceiver extends BroadcastReceiver implements AtualizarLista
                 e.printStackTrace();
             }
 
-            m.atualizarPreferencias(preferencias);
+            if(!chaves.hasNext()) {
+                m.atualizarPreferencias(preferencias);
+            }
+
             m.atualizarLista(listaEventos);
         }
 

@@ -33,11 +33,16 @@ public class NotificacaoService extends IntentService {
 
             Date data = new Date();
 
+            Log.i("MYAPP",formataData.format(data));
+
             for(int i =0; i< MainActivity.list.size();i++ ){
 
                 Evento e = MainActivity.list.get(i);
 
-                if(/*e.equals(data)*/ e.getDataInicio()!=null){
+                String atualDataFormatada = formataData.format(data);
+                String eventoDataFormatada = formataData.format(e.getDataInicio());
+
+                if(atualDataFormatada.equals(eventoDataFormatada)){
 
                     Notification.Builder builder = new Notification.Builder(this);
 
@@ -59,9 +64,9 @@ public class NotificacaoService extends IntentService {
 
             }
 
-            Log.i("MYAPP","ENTROU AQUI FORA");
+            Log.i("MYAPP","entrou aqui");
 
-            SystemClock.sleep(10000);
+            SystemClock.sleep(60000);
 
         }
 
