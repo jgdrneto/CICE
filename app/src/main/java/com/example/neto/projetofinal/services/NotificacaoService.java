@@ -42,9 +42,9 @@ public class NotificacaoService extends IntentService {
                     builder.setContentText("Você tem um evento agora ás " + formataData.format(e.getDataInicio()));
                     builder.setSmallIcon(android.R.drawable.sym_action_chat);
 
-                    Intent intent2 = new Intent(this,EventoActivity.class);
+                    Intent intent2 = new Intent(getApplicationContext(),EventoActivity.class);
                     intent2.putExtra("EVENTO",e);
-                    PendingIntent pendingIntent = PendingIntent.getActivity(this,0,intent2,MainActivity.list.indexOf(e));
+                    PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),0,intent2,MainActivity.list.indexOf(e));
                     builder.setContentIntent(pendingIntent);
                     builder.setAutoCancel(true);
 

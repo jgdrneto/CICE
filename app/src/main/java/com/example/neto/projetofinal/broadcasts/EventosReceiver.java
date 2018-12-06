@@ -49,6 +49,7 @@ public class EventosReceiver extends BroadcastReceiver implements AtualizarLista
             MainActivity m = (MainActivity) context;
 
             List<Evento> listaEventos = new ArrayList<Evento>();
+            List<String> preferencias = new ArrayList<String>();
 
             try {
                 JSONObject json = new JSONObject(intent.getStringExtra("JSON"));
@@ -57,7 +58,14 @@ public class EventosReceiver extends BroadcastReceiver implements AtualizarLista
 
                 for (int i = 0; i < eventos.length(); i++) {
                     try {
-                        listaEventos.add(new Evento((JSONObject) eventos.get(i)));
+                        Evento e = new Evento((JSONObject) eventos.get(i));
+
+                        listaEventos.add(e);
+
+                        if(!preferencias.contains(e.getTipo())){
+                            preferencias.add(e.getTipo());
+                        }
+
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -67,6 +75,7 @@ public class EventosReceiver extends BroadcastReceiver implements AtualizarLista
                 e.printStackTrace();
             }
 
+            m.atualizarPreferencias(preferencias);
             m.atualizarLista(listaEventos);
         }
 

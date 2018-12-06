@@ -1,6 +1,5 @@
 package com.example.neto.projetofinal.dialogs;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,10 +10,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
-import android.widget.Toast;
-
-import com.example.neto.projetofinal.activitys.MainActivity;
 
 public class AtualizarListaDialogFragment extends DialogFragment implements DialogInterface.OnClickListener{
 

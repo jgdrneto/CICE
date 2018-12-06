@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="10dp">
+        android:layout_marginBottom="30dp">
 
         <LinearLayout
             android:layout_weight="0.5"
@@ -76,7 +76,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="30dp"
         >
 
         <LinearLayout
@@ -86,7 +86,7 @@
 
             <TextView
                 android:id="@+id/textView_tipo"
-                android:textSize="30dp"
+                android:textSize="20dp"
                 android:textAlignment="textEnd"
                 android:layout_width="0dp"
                 android:layout_weight="@dimen/textView_key"
@@ -97,11 +97,12 @@
                 />
             <TextView
                 android:id="@+id/textView_tipo_valor"
-                android:textSize="30dp"
+                android:textSize="20dp"
                 android:gravity="center"
                 android:layout_width="0dp"
                 android:layout_weight="@dimen/textView_value"
                 android:layout_height="wrap_content"
+                android:maxLines="3"
                 style="?android:attr/textAppearanceMedium"
                 android:text=""
                 />
@@ -114,7 +115,7 @@
 
             <TextView
                 android:id="@+id/textView_local"
-                android:textSize="30dp"
+                android:textSize="20dp"
                 android:textStyle="bold"
                 android:textAlignment="textEnd"
                 android:layout_width="0dp"
@@ -125,11 +126,12 @@
                 />
             <TextView
                 android:id="@+id/textView_local_valor"
-                android:textSize="30dp"
+                android:textSize="20dp"
                 android:gravity="center"
                 android:layout_width="0dp"
                 android:layout_weight="@dimen/textView_value"
                 android:layout_height="wrap_content"
+                android:maxLines="3"
                 style="?android:attr/textAppearanceMedium"
                 android:text=""
                 />
@@ -142,7 +144,7 @@
 
             <TextView
                 android:id="@+id/textView_complemento"
-                android:textSize="30dp"
+                android:textSize="20dp"
                 android:textStyle="bold"
                 android:textAlignment="viewEnd"
                 android:layout_width="0dp"
@@ -154,11 +156,12 @@
                 />
             <TextView
                 android:id="@+id/textView_complemento_valor"
-                android:textSize="30dp"
+                android:textSize="20dp"
                 android:gravity="center"
                 android:layout_width="0dp"
                 android:layout_weight="@dimen/textView_value"
                 android:layout_height="wrap_content"
+                android:maxLines="3"
                 style="?android:attr/textAppearanceMedium"
                 android:text=""
                 />

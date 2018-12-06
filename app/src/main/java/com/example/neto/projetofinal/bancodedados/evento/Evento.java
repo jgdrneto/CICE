@@ -24,7 +24,7 @@ public class Evento implements Serializable {
 
     public Evento(JSONObject j) throws JSONException, ParseException {
 
-        this.format = new SimpleDateFormat("HH:mm dd/MM/yyy");
+        this.format = new SimpleDateFormat("HH:mm dd/MM/yyyy");
 
         this.nome = j.getString("nome");
         this.tipo = j.getString("tipo");
@@ -36,7 +36,6 @@ public class Evento implements Serializable {
         this.pluscodes = j.getString("pluscodes");
 
     }
-
 
     @Override
     public String toString() {

@@ -5,14 +5,16 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.neto.activitys.R;
+import com.example.neto.projetofinal.MapsActivity;
 import com.example.neto.projetofinal.bancodedados.evento.Evento;
 
 import java.text.SimpleDateFormat;
 
 public class EventoActivity extends AppCompatActivity {
+
+    Evento evento;
 
     TextView textView_dataInicio_valor;
     TextView textView_dataFinal_valor;
@@ -30,11 +32,11 @@ public class EventoActivity extends AppCompatActivity {
 
         Intent i = getIntent();
 
-        Evento e = (Evento) i.getSerializableExtra("EVENTO");
+        this.evento = (Evento) i.getSerializableExtra("EVENTO");
 
         SimpleDateFormat format = new SimpleDateFormat("HH:mm");
 
-        setTitle(e.getNome().toUpperCase());
+        setTitle(evento.getNome().toUpperCase());
 
         this.textView_dataInicio_valor = findViewById(R.id.textView_dataInicial_valor);
         this.textView_dataFinal_valor = findViewById(R.id.textView_dataFinal_valor);
@@ -42,11 +44,11 @@ public class EventoActivity extends AppCompatActivity {
         this.textView_tipo_valor =  findViewById(R.id.textView_tipo_valor);
         this.textView_local_valor =  findViewById(R.id.textView_local_valor);
 
-        this.textView_dataInicio_valor.setText(format.format(e.getDataInicio()));
-        this.textView_dataFinal_valor.setText(format.format(e.getDataFinal()));
-        this.textView_local_valor.setText(e.getNomeLocal());
-        this.textView_tipo_valor.setText(e.getTipo().toUpperCase());
-        this.textView_complemento_valor.setText(e.getComplemento());
+        this.textView_dataInicio_valor.setText(format.format(this.evento.getDataInicio()));
+        this.textView_dataFinal_valor.setText(format.format(this.evento.getDataFinal()));
+        this.textView_local_valor.setText(this.evento.getNomeLocal());
+        this.textView_tipo_valor.setText(this.evento.getTipo().toUpperCase());
+        this.textView_complemento_valor.setText(this.evento.getComplemento());
 
     }
 
@@ -58,7 +60,11 @@ public class EventoActivity extends AppCompatActivity {
 
     public void verNoMaps(View view) {
 
-        Toast.makeText(this,"Ainda não implementado",Toast.LENGTH_SHORT);
+        Intent i = new Intent(getApplicationContext(),MapsActivity.class);
+        i.putExtra("EVENTO", this.evento);
+        startActivity(i);
+
+        //Toast.makeText(this,"Ainda não implementado",Toast.LENGTH_SHORT);
 
     }
 }

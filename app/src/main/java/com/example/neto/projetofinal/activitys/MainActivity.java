@@ -25,6 +25,7 @@ import com.example.neto.activitys.R;
 import com.example.neto.projetofinal.adapters.ListViewEventosAdapter;
 import com.example.neto.projetofinal.bancodedados.evento.Evento;
 import com.example.neto.projetofinal.broadcasts.EventosReceiver;
+import com.example.neto.projetofinal.dialogs.AtualizarPreferenciasDialogFragment;
 import com.example.neto.projetofinal.dialogs.ExcluirEventoDialogFragment;
 import com.example.neto.projetofinal.services.AtualizarEventosService;
 import com.example.neto.projetofinal.services.NotificacaoService;
@@ -35,7 +36,11 @@ import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener,ExcluirEventoDialogFragment.OnOptionSelectedListener{
+        implements  NavigationView.OnNavigationItemSelectedListener,
+                    AdapterView.OnItemClickListener,
+                    AdapterView.OnItemLongClickListener,
+                    ExcluirEventoDialogFragment.OnOptionSelectedListener,
+                    AtualizarPreferenciasDialogFragment.OnUpdatePreferencesListener {
 
     public static volatile List<Evento> list = Collections.synchronizedList(new ArrayList<Evento>());
     ListViewEventosAdapter adapter;
@@ -50,15 +55,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
 
@@ -188,6 +184,12 @@ public class MainActivity extends AppCompatActivity
         adapter.updateAll(listaEventos);
     }
 
+    public void atualizarPreferencias(List<String> novasPreferencias){
+
+
+
+    }
+
     @Override
     protected void onDestroy() {
 
@@ -209,8 +211,10 @@ public class MainActivity extends AppCompatActivity
 
         Evento item = (Evento) parent.getItemAtPosition(position);
 
-        Toast.makeText(this,item.getNome(),Toast.LENGTH_SHORT).show();
+        Intent intent2 = new Intent(this,EventoActivity.class);
+        intent2.putExtra("EVENTO",item);
 
+        startActivity(intent2);
     }
 
     @Override
@@ -228,5 +232,10 @@ public class MainActivity extends AppCompatActivity
         if(opcao){
             this.adapter.remove(e);
         }
+    }
+
+    @Override
+    public void onUpdatePreferences(String[] preferencias, boolean[] valores) {
+
     }
 }
