@@ -8,11 +8,11 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.Iterator;
 import java.util.List;
 
 public class ManipuladorPreferencias {
@@ -36,22 +36,65 @@ public class ManipuladorPreferencias {
 
     }
 
+    public void atualizarPreferencias(String [] chaves, boolean [] valores){
 
-    void gravarNovasPreferencias(List<String> novasPreferencias){
+        if(chaves.length==valores.length) {
+
+            JSONObject preferencias = this.gerarJSONObject();
+
+            for (int i = 0; i < chaves.length; i++) {
+                try {
+                    preferencias.put(chaves[i],valores[i]);
+                } catch (JSONException e) {
+                    Log.e("MYAPP", "Falha ao colocar valores na chave " + chaves[i] + " do arquivo " + this.nomeArquivo, e);
+                }
+            }
+
+            this.gravarNoArquivo(preferencias.toString());
+
+        }
+    }
+
+    public JSONObject gerarJSONObject(){
+
+        String atuaisPreferencias = this.lerDoArquivo();
 
         try {
-
-            String atuaisPreferencias = this.lerDoArquivo();
-
-            JSONObject preferencias = new JSONObject(atuaisPreferencias);
-
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(this.context.openFileOutput(this.nomeArquivo, Context.MODE_PRIVATE));
-
-        } catch (IOException e) {
-            Log.e("MYAPP", "Falha em gravar dados no arquivo " + this.nomeArquivo, e);
+            return new JSONObject(atuaisPreferencias);
         } catch (JSONException e) {
             Log.e("MYAPP", "Falha ao criar objeto JSON com os dados do arquivo " + this.nomeArquivo, e);
         }
+
+        return new JSONObject();
+    }
+
+    public void gravarNovasPreferencias(List<String> novasPreferencias){
+
+        JSONObject preferencias = this.gerarJSONObject();
+
+        Iterator<String> prefs = preferencias.keys();
+
+        while(prefs.hasNext()){
+
+            String pref = prefs.next();
+
+            if(!novasPreferencias.contains(pref)){
+                prefs.remove();
+            }else{
+                novasPreferencias.remove(pref);
+            }
+        }
+
+        for(String i : novasPreferencias){
+            try {
+                preferencias.put (i,true);
+            } catch (JSONException e) {
+                Log.e("MYAPP", "Falha ao colocar valores na chave " + i + " do arquivo " + this.nomeArquivo, e);
+            }
+        }
+
+        this.gravarNoArquivo(preferencias.toString());
+
     }
 
 
@@ -85,7 +128,13 @@ public class ManipuladorPreferencias {
                 }
 
                 inputStream.close();
-                ret = stringBuilder.toString();
+
+                if(stringBuilder.toString().isEmpty()){
+                    ret = "{}";
+                }else {
+
+                    ret = stringBuilder.toString();
+                }
             }
         }
         catch (FileNotFoundException e) {

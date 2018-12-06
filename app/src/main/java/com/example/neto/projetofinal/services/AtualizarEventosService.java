@@ -100,8 +100,6 @@ public class AtualizarEventosService extends IntentService {
                 Log.e("MYAPP","Erro desconhecido",e);
             }
 
-
-
             SystemClock.sleep(1000);
         }
 

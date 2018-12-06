@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 public class Evento implements Serializable {
 
@@ -109,5 +110,33 @@ public class Evento implements Serializable {
 
     public void setPluscodes(String pluscodes) {
         this.pluscodes = pluscodes;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Evento evento = (Evento) o;
+        return Objects.equals(nome, evento.nome) &&
+                Objects.equals(tipo, evento.tipo) &&
+                Objects.equals(complemento, evento.complemento) &&
+                Objects.equals(nomeLocal, evento.nomeLocal) &&
+                Objects.equals(dataInicio, evento.dataInicio) &&
+                Objects.equals(dataFinal, evento.dataFinal) &&
+                Objects.equals(endereco, evento.endereco) &&
+                Objects.equals(pluscodes, evento.pluscodes);
+    }
+
+    @Override
+    public int hashCode() {
+
+        int i =Objects.hash(nome, tipo, complemento, nomeLocal, dataInicio, dataFinal, endereco, pluscodes);
+
+        if(i<0){
+            return i*(-1);
+        }else{
+            return i;
+        }
     }
 }

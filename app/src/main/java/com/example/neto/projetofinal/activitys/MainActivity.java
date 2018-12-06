@@ -5,8 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,17 +18,20 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.neto.activitys.R;
 import com.example.neto.projetofinal.adapters.ListViewEventosAdapter;
 import com.example.neto.projetofinal.bancodedados.evento.Evento;
+import com.example.neto.projetofinal.bancodedados.preferencia.ManipuladorPreferencias;
 import com.example.neto.projetofinal.broadcasts.EventosReceiver;
 import com.example.neto.projetofinal.dialogs.AtualizarPreferenciasDialogFragment;
 import com.example.neto.projetofinal.dialogs.ExcluirEventoDialogFragment;
 import com.example.neto.projetofinal.services.AtualizarEventosService;
 import com.example.neto.projetofinal.services.NotificacaoService;
 import com.google.firebase.auth.FirebaseAuth;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,7 +44,10 @@ public class MainActivity extends AppCompatActivity
                     ExcluirEventoDialogFragment.OnOptionSelectedListener,
                     AtualizarPreferenciasDialogFragment.OnUpdatePreferencesListener {
 
+    ManipuladorPreferencias manipuladorPreferencias;
+
     public static volatile List<Evento> list = Collections.synchronizedList(new ArrayList<Evento>());
+    private List<Evento> backup = new ArrayList<Evento>();
     ListViewEventosAdapter adapter;
     ListView listView;
     String email;
@@ -89,6 +94,8 @@ public class MainActivity extends AppCompatActivity
         this.listView.setAdapter(adapter);
         this.listView.setOnItemClickListener(this);
         this.listView.setOnItemLongClickListener(this);
+
+        this.manipuladorPreferencias = new ManipuladorPreferencias(this.email+".json",this);
 
     }
 
@@ -169,6 +176,8 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_preferencias) {
 
+            AtualizarPreferenciasDialogFragment.show(getSupportFragmentManager(),this, this.manipuladorPreferencias);
+
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_logout) {
@@ -181,12 +190,29 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void atualizarLista(List<Evento> listaEventos) {
-        adapter.updateAll(listaEventos);
+
+        this.backup = new ArrayList<Evento>(listaEventos);
+
+        JSONObject json = manipuladorPreferencias.gerarJSONObject();
+
+        List<Evento> eventos =  new ArrayList<Evento>();
+
+        for(int i=0;i<listaEventos.size();i++){
+            try {
+                if(json.getBoolean(listaEventos.get(i).getTipo())==true){
+                    eventos.add(listaEventos.get(i));
+                }
+            } catch (JSONException e1) {
+                Log.e("MYAPP","Erro na obtenção do tipo de evento " + listaEventos.get(i).getTipo(), e1);
+            }
+        }
+
+        this.adapter.updateAll(eventos);
     }
 
-    public void atualizarPreferencias(List<String> novasPreferencias){
+    public void atualizarPreferencias(List<String> novasPreferencias) {
 
-
+        this.manipuladorPreferencias.gravarNovasPreferencias(novasPreferencias);
 
     }
 
@@ -197,9 +223,7 @@ public class MainActivity extends AppCompatActivity
         stopServices();
 
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-        for(int i = 0; i<MainActivity.list.size();i++) {
-            notificationManager.cancel(i);
-        }
+        notificationManager.cancelAll();
 
         auth.signOut();
 
@@ -236,6 +260,33 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onUpdatePreferences(String[] preferencias, boolean[] valores) {
+
+        this.manipuladorPreferencias.atualizarPreferencias(preferencias,valores);
+
+        JSONObject json = manipuladorPreferencias.gerarJSONObject();
+
+        List<Evento> listaEventos = new ArrayList<Evento>();
+
+        for(int i=0;i<this.backup.size();i++) {
+
+            Evento e = this.backup.get(i);
+
+            try {
+                if (json.getBoolean(e.getTipo()) == true) {
+                    listaEventos.add(e);
+                }
+            } catch (JSONException e1) {
+                Log.e("MYAPP","Erro na obtenção do tipo de evento " + e.getTipo(), e1);
+            } catch (NullPointerException e1) {
+                /*
+                SE ENTROU AQUI É PQ A NOTIFICAÇÃO NÃO ESTA ATIVA,
+                ENTAO NÃO FAZ NADA,INFELIZMENTE O MÉTODO PARA VER
+                AS NOTIFICAÇÕES ATIVAS SO TEM NA API 23.
+                */
+            }
+        }
+
+        this.adapter.updateAll(listaEventos);
 
     }
 }

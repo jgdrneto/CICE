@@ -1,5 +1,6 @@
 package com.example.neto.projetofinal.services;
 
+import android.annotation.SuppressLint;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -32,7 +33,9 @@ public class NotificacaoService extends IntentService {
 
             Date data = new Date();
 
-            for(Evento e :  MainActivity.list){
+            for(int i =0; i< MainActivity.list.size();i++ ){
+
+                Evento e = MainActivity.list.get(i);
 
                 if(/*e.equals(data)*/ e.getDataInicio()!=null){
 
@@ -44,14 +47,14 @@ public class NotificacaoService extends IntentService {
 
                     Intent intent2 = new Intent(getApplicationContext(),EventoActivity.class);
                     intent2.putExtra("EVENTO",e);
-                    PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),0,intent2,MainActivity.list.indexOf(e));
+                    @SuppressLint("WrongConstant") PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),e.hashCode(),intent2,Intent.FLAG_ACTIVITY_NEW_TASK);
                     builder.setContentIntent(pendingIntent);
                     builder.setAutoCancel(true);
 
                     Notification notification = builder.build();
 
                     NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                    nm.notify(MainActivity.list.indexOf(e),notification);
+                    nm.notify(e.hashCode(),notification);
                 }
 
             }
